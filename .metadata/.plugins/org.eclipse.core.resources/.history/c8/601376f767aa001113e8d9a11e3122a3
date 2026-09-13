@@ -1,0 +1,43 @@
+package Pekan1_2511532008;
+
+public class Rekening {
+	String nomorRekening;
+	String namaPemilik;
+	double saldo;
+	
+	public Rekening (String nomor, String nama , double saldoAwal) {
+		nomorRekening = nomor;
+		namaPemilik = nama;
+		saldo = saldoAwal;
+		System.out.println("Rekening atas nama " + namaPemilik + " Berhasil dibuat dengan saldo Rp." + saldo  );
+	}
+	
+	public void setorTunai(double nominal) {
+		if (nominal > 0) {
+			saldo += nominal;
+			System.out.println("Setor tunai : Rp. " + nominal + " Berhasil ditambahkan, Saldo Sekarang :  Rp." + saldo);
+		}
+		else {
+			System.out.println("Setor tunai gagal, saldo harus lebih besar dari 0 !!");
+		}
+	}
+	
+	public void cekInformasi () {
+		System.out.println("INFORMASI REKENING");
+		System.out.println("NOMOR REKENING : " + nomorRekening);
+		System.out.println("NAMA PEMILIK   : " + namaPemilik);
+		System.out.println("SALDO          : " + saldo);
+		System.out.println("+++++++++++++++++++++++++++++++++++++");
+	}
+	
+	public void tarikTunai (double nominal) {
+		if (nominal <= 0) {
+			System.out.println ("Saldo Anda 0, Tidak bisa menarik uang ! ");
+		}
+		else {
+			saldo -= nominal;
+			System.out.println("Saldo Sekarang : " + saldo);
+		}
+	}
+	
+}
