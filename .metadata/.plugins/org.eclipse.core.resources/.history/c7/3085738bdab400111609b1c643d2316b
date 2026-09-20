@@ -1,0 +1,19 @@
+package Pekan2_2511532008;
+
+public class Transaksi {
+	String idTransaksi;
+	String jenis;
+	double nominal;
+	
+	public Transaksi (String idTransaksi, String jenis, double nominal) {
+		this.idTransaksi = idTransaksi;
+		this.jenis = jenis;
+		this.nominal = nominal;	
+	}
+	public void cetakDetail() {
+		System.out.println("ID : " + idTransaksi + " Jenis : " + jenis + " Nominal : " + nominal);
+	}
+}
+
+
+

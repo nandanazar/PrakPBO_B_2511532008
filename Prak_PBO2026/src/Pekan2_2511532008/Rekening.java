@@ -1,0 +1,100 @@
+package Pekan2_2511532008;
+import java.util.ArrayList;
+public class Rekening {
+	String nomorRekening;
+	String namaPemilik;
+	double saldo;
+	
+	ArrayList<Transaksi> riwayatTransaksi;
+	
+	public Rekening (String nomor, String nama , double saldoAwal) {
+		nomorRekening = nomor;
+		namaPemilik = nama;
+		saldo = saldoAwal;
+		this.riwayatTransaksi = new ArrayList<>();
+		System.out.println("Rekening atas nama " + namaPemilik + " Berhasil dibuat dengan saldo Rp." + saldo  );
+	}
+	public String getNomorRekening() {
+		return nomorRekening;
+	}
+	public String getNamaPemilik() {
+		return namaPemilik;
+	}
+	
+	public void setorTunai(double nominal) {
+		
+		if (nominal > 0) {
+//			Menambahkan
+			String idTrx = "TRS-S-" + System.currentTimeMillis();
+			Transaksi trxBaru = new Transaksi(idTrx, "Kredit" , nominal);
+			riwayatTransaksi.add(trxBaru);
+			
+			saldo += nominal;
+			System.out.println("Setor tunai : Rp. " + nominal + " Berhasil ditambahkan, Saldo Sekarang :  Rp." + saldo);
+		}
+		else {
+			System.out.println("Setor tunai gagal, saldo harus lebih besar dari 0 !!");
+		}
+	}
+	
+	public void cekInformasi () {
+		System.out.println("+++++++++++++++++++++++++++++++++++++");
+		System.out.println("INFORMASI REKENING");
+		System.out.println("NOMOR REKENING : " + nomorRekening);
+		System.out.println("NAMA PEMILIK   : " + namaPemilik);
+		System.out.println("SALDO          : " + saldo);
+		System.out.println("+++++++++++++++++++++++++++++++++++++");
+	}
+	
+
+	public void tarikTunai (double nominal) {
+		if (saldo <= 0) {
+			System.out.println ("Saldo Anda 0, Tidak bisa menarik uang ! ");
+			System.out.println("");
+			return;
+		}
+		else if (nominal < 10000) {
+			System.out.println("Minimal Tarik Saldo Rp10.000 ");
+			System.out.println("Penarikan Saldo Gagal ! ");
+			System.out.println(" ");
+			return;
+		}
+		else if (nominal > saldo) {
+			System.out.println("Nominal yang di Tarik lebih banyak dibanding isi Saldo! ");
+			System.out.println("");
+			return;
+		}
+		else {
+//			Tugas 1
+			String idTrx = "TRS-T-" + System.currentTimeMillis();
+			Transaksi trxBaru = new Transaksi(idTrx, "Debit" , nominal);
+			riwayatTransaksi.add(trxBaru);
+	
+			saldo -= nominal;
+			System.out.println("Saldo Sekarang : " + saldo);
+			System.out.println("");
+			return;
+		}
+	}
+	
+// Tugas 2
+	public void cetakMutasi() {
+	    System.out.println("=====================================");
+	    System.out.println("RIWAYAT MUTASI REKENING");
+	    System.out.println("NOMOR REKENING : " + nomorRekening);
+	    System.out.println("=====================================");
+	    
+	    if (riwayatTransaksi.isEmpty()) {
+	        System.out.println("Belum ada transaksi pada rekening ini");
+	    } else {
+	        for (Transaksi t : riwayatTransaksi) {
+	            t.cetakDetail();
+	        }
+	    }
+	    System.out.println("=====================================");
+	}
+
+	
+	
+	
+}
