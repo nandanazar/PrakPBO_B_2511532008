@@ -1,0 +1,183 @@
+package Pekan4_2511532008;
+
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class Main {
+	static Scanner key = new Scanner(System.in);
+
+	public static void main(String[]args) {
+		
+		ArrayList<Rekening> daftarAkun = new ArrayList<>();
+		Rekening akunAktif = null;
+		boolean isRunning = true;
+		System.out.println("SISTEM PERBANKAN MINI");
+
+		while (isRunning) {
+			System.out.println("\nMENU UTAMA :");
+			
+			if (akunAktif != null) {
+				System.out.println("Akun Aktif: " + akunAktif.getNomorRekening() + " -- " + akunAktif.getNamaPemilik() );
+			} else {
+				System.out.println("Akun Aktif: Belum Ada ");
+			}
+			System.out.println("1 Buka Rekening Baru");
+			System.out.println("2. Pilih / Pindah Rekening Aktif");
+			System.out.println("3 Setor Tunai");
+			System.out.println("4.Tarik Tunai");
+			System.out.println("5.Cek Informasi Rekening:");
+			System.out.println("6. Cetak Mutasi (Riwayat)");
+			System.out.println("7. Simulasi Akhir Bulan (Khusus Tabungan)");
+			System.out.println("0.Keluar");
+			
+			int pilihan = key.nextInt();
+			key.nextLine();		
+			switch (pilihan) {
+			
+				case 1 :
+						System.out.println("Masukan Nomor Rekening : ");
+						String no = key.nextLine();
+						System.out.println("Masukan Nama Pemilik : ");
+						String nama = key.nextLine();
+						System.out.println("Masukan Saldo Awal : ");
+						double saldo = key.nextDouble();
+						key.nextLine();
+						System.out.println ("Masukan PIN : ");
+						String pin = key.nextLine();
+						System.out.println("Pilih Produk: 1 Tabungan Umum | 2. Giro Bisnis");
+						int dua_pilihan = key.nextInt();
+						key.nextLine();
+						
+						
+						if (dua_pilihan == 1) {
+							System.out.println("Masukan Suku Bunga : ");
+							double sukuBunga = key.nextDouble();
+							key.nextLine();
+							
+							Rekening akunBaru = new RekeningTabungan(no,nama,saldo, pin, sukuBunga);
+							
+							daftarAkun.add(akunBaru);
+							akunAktif = akunBaru;
+							System.out.println("Rekening otomatis diset sebagai Akun Aktif.");
+							
+						} else if (dua_pilihan == 2) {
+							System.out.println("Masukan batas Giro : ");
+							double giro = key.nextDouble();
+							key.nextLine();
+							
+							Rekening akunBaru = new RekeningGiro(no,nama,saldo,pin, giro);
+							
+							daftarAkun.add(akunBaru);
+							akunAktif = akunBaru;
+							System.out.println("Rekening otomatis diset sebagai Akun Aktif.");
+
+							
+
+						} else {
+							System.out.println("Input Tidak Valid !");
+						}
+						
+						break;
+				case 2:
+					if (daftarAkun.isEmpty()) {
+						System.out.println("Error: Belum ada rekening terdaftar di sistem!");
+					} else {
+						System.out.print("Masukkan Nomor Rekening yang ingin diaktifkan: ");
+						String cariNo = key.nextLine();
+						
+						Rekening ditemukan = cariRekening(daftarAkun, cariNo);
+						if (ditemukan != null) {
+							akunAktif = ditemukan;
+							System.out.println("Berhasil berpindah ke rekening a.n " + akunAktif.getNamaPemilik());
+						} else {
+							System.out.println("Error: Nomor rekening tidak ditemukan!");
+						}
+					}
+					break;
+				case 3 :
+					if (akunAktif == null) {
+						System.out.println ("Error , Maaf anda belum mempunyai nomor Rekening!");
+						
+					} else {
+						System.out.println("Masukan Nominal Setor : ");
+						double setor = key.nextDouble();
+						akunAktif.setorTunai(setor);	
+					}
+					break;
+				case 4 :
+					System.out.print("Masukan Pin : ");
+					String pin2 = key.nextLine();
+					if (akunAktif == null) {
+						System.out.println("Buat akun dulu ! ");
+					}
+					else if (akunAktif.otentikasi(pin2) == false) {
+						System.out.println("PIN SALAH !");
+					}
+					else {
+						System.out.println("masukan jumlah tarik tunai : ");
+						double tarik = key.nextDouble();
+						akunAktif.tarikTunai(tarik);
+					}
+					break;
+					
+					
+				case 5 :
+					System.out.print("Masukan Pin : ");
+					String pin3 = key.nextLine();
+					if (akunAktif == null) {
+						System.out.println("Error Anda Belum membuka rekening :");
+					}
+					else if (akunAktif.otentikasi(pin3) == false) {
+							System.out.println("PIN SALAH !");
+						}
+					else {
+						akunAktif.cekInformasi();
+					}
+					break;	
+				case 6:
+					System.out.print("Masukan Pin : ");
+					String pin4 = key.nextLine();
+				    if (akunAktif == null) {
+				        System.out.println("Error: Anda belum memilih/membuka rekening!");
+				    }
+				    else if (akunAktif.otentikasi(pin4) == false) {
+				    	System.out.println("PIN SALAH !");
+				    }
+				    
+				    else {
+				        akunAktif.cetakMutasi();
+				    }
+				    break;
+				
+				case 7 :
+				    if (akunAktif == null) {
+				        System.out.println("Error: Anda belum memilih/membuka rekening!");
+				    } else if (akunAktif instanceof RekeningTabungan) {
+				        RekeningTabungan tab = (RekeningTabungan) akunAktif;  
+				        tab.tambahBungaAkhirBulan();
+				    } else {
+				        System.out.println("Gagal: Fitur bunga akhir bulan hanya berlaku untuk Rekening Tabungan.");
+				    }
+				    break;
+				
+	
+				case 0 :
+					isRunning =false ;
+					System.out.println("System ditutup Terima Kasih");
+					break;
+					
+				default : 
+					System.out.println("Pilihan tidak valid");
+						}
+		}
+	}
+	private static Rekening cariRekening(ArrayList<Rekening> list, String noRek) {
+		for (Rekening r : list) {
+			if (r.getNomorRekening().equalsIgnoreCase(noRek)) {
+				return r;
+			}
+		}
+		
+		return null;
+	}
+}
