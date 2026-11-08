@@ -30,15 +30,21 @@ public class CheckoutService {
     public long total(List<Product> items, ShippingService shipping) {
         return subtotal(items) + shipping.calculateCost(totalWeight(items));
     }
-
-    public boolean checkout(List<Product> items, ShippingService shipping, PaymentMethod payment) {
-        if (items.isEmpty()) {
-            return false;
-        }
-        return payment.pay(total(items, shipping));
-    }
+    
 
     public boolean refund(RefundablePayment payment, long amount) {
         return payment.refund(amount);
+    }
+
+    public long grandTotal(List<Product> items, ShippingService shipping, PaymentMethod payment) {
+        long total = total(items, shipping);
+        return total + payment.adminFee(total);
+    }
+
+    public boolean checkout(List<Product> items, ShippingService shipping, PaymentMethod payment) {
+        if (items.isEmpty()) {
+        return false;
+        }
+    return payment.pay(grandTotal(items, shipping, payment));
     }
 }

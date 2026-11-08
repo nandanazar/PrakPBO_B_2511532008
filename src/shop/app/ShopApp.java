@@ -23,6 +23,7 @@ public class ShopApp {
         Product ebook = new DigitalProduct("EBK-003", "E-book Resep Kue Nusantara", 50_000,
                 "https://toko-umkm.example/unduh/ebk-003");
         List<Product> cart = List.of(coffee, rendang, ebook);
+        
 
         System.out.println("== Katalog ==");
         for (Product product : cart) {
@@ -84,5 +85,6 @@ public class ShopApp {
 
         System.out.println("\n" + voucher.getName() + " untuk e-book berhasil? "
                 + checkout.checkout(List.of(ebook), regular, voucher));
+
     }
 }
